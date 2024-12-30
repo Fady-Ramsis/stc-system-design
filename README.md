@@ -91,7 +91,10 @@ project/
 3. **Start the Docker Services**:
    Bring up the application and database using Docker Compose:
    ```bash
-   docker-compose up --build
+   docker compose -f  docker-compose-mssql.yml  up --build -d
+   docker exec -it mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'ASD@12345' -Q "CREATE DATABASE [stc-assessment];"
+   docker compose -f  docker-compose-app.yml --env-file environment_template up --build -d
+
    ```
 
 4. **Access the Application**:
