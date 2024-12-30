@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.7" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.7
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.7.xsd">
+    <changeSet id="2024_12_30_2034" author="fadyramsis0@gmail.com">
+        <sql>
+            -- Create Permission Group Table
+            CREATE TABLE permission_group (
+            id BIGINT IDENTITY(1,1) PRIMARY KEY,
+            group_name VARCHAR(255) NOT NULL
+            );
+
+            -- Create Permissions Table
+            CREATE TABLE permission_ (
+            id BIGINT IDENTITY(1,1) PRIMARY KEY,
+            user_email VARCHAR(255) NOT NULL,
+            permission_level VARCHAR(50) NOT NULL,
+            group_id BIGINT NOT NULL,
+            FOREIGN KEY (group_id) REFERENCES permission_group(id)
+            );
+
+            -- Create Item Table
+            CREATE TABLE item_ (
+            id BIGINT IDENTITY(1,1) PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            type VARCHAR(50) NOT NULL,
+            parent_id BIGINT DEFAULT NULL,
+            permission_group_id BIGINT DEFAULT NULL,
+            FOREIGN KEY (parent_id) REFERENCES item_(id),
+            FOREIGN KEY (permission_group_id) REFERENCES permission_group(id)
+            );
+
+            -- Create Files Table
+            CREATE TABLE file_ (
+            id BIGINT IDENTITY(1,1) PRIMARY KEY,
+            binary_data VARBINARY(MAX) NOT NULL,
+            item_id BIGINT NOT NULL,
+            FOREIGN KEY (item_id) REFERENCES item_(id)
+            );
+
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>
