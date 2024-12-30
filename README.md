@@ -1,0 +1,1 @@
+# stc-system-design
