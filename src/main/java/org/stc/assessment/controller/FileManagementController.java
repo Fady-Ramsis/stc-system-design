@@ -56,19 +56,19 @@ public class FileManagementController {
         return ResponseEntity.ok("File '" + fileName + "' created under folder ID " + folderId);
     }
 
-    @GetMapping("/files/{id}/download")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable(name = "id") Long id) {
+    @GetMapping("/files/{file_id}/download")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable(name = "file_id") Long id) {
         File file = fileService.getFileById(id);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getItem().getName() + "\"")
                 .body(file.getBinaryData());
     }
 
-    @GetMapping("/files/{id}/metadata")
+    @GetMapping("/items/{item_id}/metadata")
     public ResponseEntity<Object> getFileMetadata(
-            @PathVariable(name = "id") Long id,
+            @PathVariable(name = "item_id") Long itemId,
             @RequestParam(name = "user_email") String userEmail) {
-        Optional<FileMetadataDTO> metadata = fileService.getFileMetadata(id, userEmail);
+        Optional<FileMetadataDTO> metadata = fileService.getFileMetadata(itemId, userEmail);
         return metadata.<ResponseEntity<Object>>map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body("Access denied or file not found."));
     }
